@@ -4,11 +4,11 @@ Welcome to the Weather Picnic Planner code exercise! Your goal is to create a ro
 
 ## 🎯 Main Features and Requirements
 
-### 1. Interactive Two-Week Forecast Calendar
+### 1. Interactive Two Week Forecast Calendar
 
 **Description:**
 
-- Display a calendar showing the next two weeks from today's date.
+- Display a calendar showing the next two weeks from today's date (inclusive of today).
 - Dates should be color-coded according to picnic suitability:
   - **Green:** Ideal picnic conditions (comfortable temperatures, low chance of rain).
   - **Yellow:** Fair conditions (moderate temperatures, slight chance of rain).
@@ -67,14 +67,15 @@ Consider implementing one or more of the following to showcase advanced architec
 Clearly demonstrate the following in your submission:
 
 - Separation of concerns and modular design
-- Clear, maintainable, and well-documented code
+- Clear, maintainable, and well documented code
 - Performance considerations and optimizations
 - Handling of edge cases and errors
+- Thoughtful user experience (while not looking for UI perfection, we do want an easily useable interface)
 
 ## 🛠 Deliverables
 
-- Working application source code in a publicly accessible repository
-  - Fork this repo, submit a PR with from your repo to alert us that you are ready for us to review
+- Working source code in a publicly accessible repository
+  - Fork this repo and submit a PR with from your repo to alert us that you are ready for us to review
 - Instructions on how to run, build, and test the application
 - Documentation (or README) explaining architecture decisions and trade-offs
 
