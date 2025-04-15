@@ -9,7 +9,7 @@ Welcome to the Weather Picnic Planner code exercise! Your goal is to create a ro
 **Description:**
 
 - Display a calendar showing the next two weeks from today's date (inclusive of today).
-- Dates should be color-coded according to picnic suitability:
+- Dates should be color coded according to picnic suitability:
   - **Green:** Ideal picnic conditions (comfortable temperatures, low chance of rain).
   - **Yellow:** Fair conditions (moderate temperatures, slight chance of rain).
   - **Red:** Poor conditions (extreme temperatures, high chance of rain).
@@ -17,7 +17,7 @@ Welcome to the Weather Picnic Planner code exercise! Your goal is to create a ro
 **Architecture Considerations:**
 
 - Define clear criteria for "ideal," "fair," and "poor" conditions.
-- Implement efficient data-fetching and caching.
+- Implement efficient data fetching and caching.
 
 ### 2. Detailed Weather View for Each Day
 
