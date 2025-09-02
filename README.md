@@ -1,92 +1,310 @@
-# ☀️ Weather Picnic Planner
+Welcome to your new TanStack app! 
 
-Welcome to the Weather Picnic Planner code exercise! Your goal is to create a robust, intuitive application that helps users choose the best day for a picnic based on weather forecasts and historical trends. You will use the [Open-Meteo API](https://open-meteo.com/) as your primary weather data source.
+# Getting Started
 
-## 🎯 Main Features and Requirements
+To run this application:
 
-### 1. Interactive Two Week Forecast Calendar
+```bash
+pnpm install
+pnpm start
+```
 
-**Description:**
+# Building For Production
 
-- Display a calendar showing the next two weeks from today's date (inclusive of today).
-- Dates should be color coded according to picnic suitability:
-  - **Green:** Ideal picnic conditions (comfortable temperatures, low chance of rain).
-  - **Yellow:** Fair conditions (moderate temperatures, slight chance of rain).
-  - **Red:** Poor conditions (extreme temperatures, high chance of rain).
+To build this application for production:
 
-**Architecture Considerations:**
+```bash
+pnpm build
+```
 
-- Define clear criteria for "ideal," "fair," and "poor" conditions.
-- Implement efficient data fetching and caching.
+## Testing
 
-### 2. Detailed Weather View for Each Day
+This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
 
-**Description:**
+```bash
+pnpm test
+```
 
-- Clicking a date on the calendar should display:
-  - Forecasted temperature, precipitation, humidity, and wind details.
-  - Historical weather statistics for that date from the past 10 years (average temperatures, precipitation patterns, etc.).
+## Styling
 
-**Architecture Considerations:**
+This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
 
-- Aggregate and clearly visualize historical data.
-- Handle multiple concurrent data requests efficiently.
 
-### 3. Local Storage and Data Caching
+## Linting & Formatting
 
-**Description:**
 
-- Cache weather data locally to minimize unnecessary API calls and improve app performance.
-- Clearly document caching strategy including refresh intervals and cache invalidation.
+This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
 
-**Architecture Considerations:**
+```bash
+pnpm lint
+pnpm format
+pnpm check
+```
 
-- Choose appropriate local storage (e.g., localStorage, IndexedDB, SQLite).
-- Clearly document cache management strategies.
 
-### 4. API Abstraction and Extensibility
+## Shadcn
 
-**Description:**
+Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
 
-- Implement a clear abstraction layer around the Open-Meteo API.
-- Ensure your architecture allows easy substitution or addition of alternative weather data sources.
+```bash
+pnpx shadcn@latest add button
+```
 
-**Architecture Considerations:**
 
-- Craft a clear interface design.
 
-## 📌 Bonus Features (Optional Stretch Goals)
+## Routing
+This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as files in `src/routes`.
 
-Consider implementing one or more of the following to showcase advanced architectural thinking:
+### Adding A Route
 
-- **Location Selection:** Allow users to dynamically select or update their picnic location.
-- **User Preferences:** Enable users to customize weather criteria (e.g., temperature thresholds).
+To add a new route to your application just add another a new file in the `./src/routes` directory.
 
-## 🔨 Technical Expectations
+TanStack will automatically generate the content of the route file for you.
 
-Clearly demonstrate the following in your submission:
+Now that you have two routes you can use a `Link` component to navigate between them.
 
-- Separation of concerns and modular design
-- Clear, maintainable, and well documented code
-- Performance considerations and optimizations
-- Handling of edge cases and errors
-- Thoughtful user experience (while not looking for UI perfection, we do want an easily useable interface)
+### Adding Links
 
-## 🛠 Deliverables
+To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
 
-- Working source code in a publicly accessible repository
-  - Fork this repo and submit a PR with from your repo to alert us that you are ready for us to review
-- Instructions on how to run, build, and test the application
-- Documentation (or README) explaining architecture decisions and trade-offs
+```tsx
+import { Link } from "@tanstack/react-router";
+```
 
-## 🎖 Evaluation Criteria
+Then anywhere in your JSX you can use it like so:
 
-Your submission will be evaluated based on:
+```tsx
+<Link to="/about">About</Link>
+```
 
-- **Architecture Quality** (modularity, maintainability, scalability)
-- **Code Clarity and Readability**
-- **Implementation of Core Features**
+This will create a link that will navigate to the `/about` route.
 
----
+More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
 
-Good luck, have fun, and happy coding! 🌤
+### Using A Layout
+
+In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you use the `<Outlet />` component.
+
+Here is an example layout that includes a header:
+
+```tsx
+import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+
+import { Link } from "@tanstack/react-router";
+
+export const Route = createRootRoute({
+  component: () => (
+    <>
+      <header>
+        <nav>
+          <Link to="/">Home</Link>
+          <Link to="/about">About</Link>
+        </nav>
+      </header>
+      <Outlet />
+      <TanStackRouterDevtools />
+    </>
+  ),
+})
+```
+
+The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
+
+More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
+
+
+## Data Fetching
+
+There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
+
+For example:
+
+```tsx
+const peopleRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/people",
+  loader: async () => {
+    const response = await fetch("https://swapi.dev/api/people");
+    return response.json() as Promise<{
+      results: {
+        name: string;
+      }[];
+    }>;
+  },
+  component: () => {
+    const data = peopleRoute.useLoaderData();
+    return (
+      <ul>
+        {data.results.map((person) => (
+          <li key={person.name}>{person.name}</li>
+        ))}
+      </ul>
+    );
+  },
+});
+```
+
+Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
+
+### React-Query
+
+React-Query is an excellent addition or alternative to route loading and integrating it into you application is a breeze.
+
+First add your dependencies:
+
+```bash
+pnpm add @tanstack/react-query @tanstack/react-query-devtools
+```
+
+Next we'll need to create a query client and provider. We recommend putting those in `main.tsx`.
+
+```tsx
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+// ...
+
+const queryClient = new QueryClient();
+
+// ...
+
+if (!rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement);
+
+  root.render(
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
+}
+```
+
+You can also add TanStack Query Devtools to the root route (optional).
+
+```tsx
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+const rootRoute = createRootRoute({
+  component: () => (
+    <>
+      <Outlet />
+      <ReactQueryDevtools buttonPosition="top-right" />
+      <TanStackRouterDevtools />
+    </>
+  ),
+});
+```
+
+Now you can use `useQuery` to fetch your data.
+
+```tsx
+import { useQuery } from "@tanstack/react-query";
+
+import "./App.css";
+
+function App() {
+  const { data } = useQuery({
+    queryKey: ["people"],
+    queryFn: () =>
+      fetch("https://swapi.dev/api/people")
+        .then((res) => res.json())
+        .then((data) => data.results as { name: string }[]),
+    initialData: [],
+  });
+
+  return (
+    <div>
+      <ul>
+        {data.map((person) => (
+          <li key={person.name}>{person.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
+```
+
+You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
+
+## State Management
+
+Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.
+
+First you need to add TanStack Store as a dependency:
+
+```bash
+pnpm add @tanstack/store
+```
+
+Now let's create a simple counter in the `src/App.tsx` file as a demonstration.
+
+```tsx
+import { useStore } from "@tanstack/react-store";
+import { Store } from "@tanstack/store";
+import "./App.css";
+
+const countStore = new Store(0);
+
+function App() {
+  const count = useStore(countStore);
+  return (
+    <div>
+      <button onClick={() => countStore.setState((n) => n + 1)}>
+        Increment - {count}
+      </button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+One of the many nice features of TanStack Store is the ability to derive state from other state. That derived state will update when the base state updates.
+
+Let's check this out by doubling the count using derived state.
+
+```tsx
+import { useStore } from "@tanstack/react-store";
+import { Store, Derived } from "@tanstack/store";
+import "./App.css";
+
+const countStore = new Store(0);
+
+const doubledStore = new Derived({
+  fn: () => countStore.state * 2,
+  deps: [countStore],
+});
+doubledStore.mount();
+
+function App() {
+  const count = useStore(countStore);
+  const doubledCount = useStore(doubledStore);
+
+  return (
+    <div>
+      <button onClick={() => countStore.setState((n) => n + 1)}>
+        Increment - {count}
+      </button>
+      <div>Doubled - {doubledCount}</div>
+    </div>
+  );
+}
+
+export default App;
+```
+
+We use the `Derived` class to create a new store that is derived from another store. The `Derived` class has a `mount` method that will start the derived store updating.
+
+Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
+
+You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
+
+# Demo files
+
+Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
+
+# Learn More
+
+You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
