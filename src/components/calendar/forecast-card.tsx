@@ -1,5 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Link } from '@tanstack/react-router'
+import { cn } from '@/lib/utils'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import {
+  classifySuitability,
+  suitabilityToClasses,
+  type Suitability,
+} from '@/lib/suitability'
+import { useWeatherSettings } from '@/hooks/use-weather-settings'
 
 interface Props {
   date: string
@@ -18,9 +25,27 @@ export function ForecastCard({
   windSpeed,
   humidity,
 }: Props) {
+  const { settings } = useWeatherSettings()
+  const suitability: Suitability | undefined = settings
+    ? classifySuitability(
+        {
+          maxTempF: temperatureMax,
+          minTempF: temperatureMin,
+          precipitationChancePct: precipitationProbability,
+          maxWindMph: windSpeed,
+          humidityMeanPct: humidity,
+        },
+        settings,
+      )
+    : undefined
   return (
     <Link to="/day/$date" params={{ date }}>
-      <Card className="hover:shadow-md transition-shadow cursor-pointer">
+      <Card
+        className={cn(
+          'hover:shadow-md transition-shadow cursor-pointer border',
+          suitability && suitabilityToClasses(suitability),
+        )}
+      >
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium">
             {new Date(date).toLocaleDateString('en-US', {

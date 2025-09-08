@@ -61,6 +61,21 @@ function App() {
             Two-Week Weather Forecast for {getLocationDisplay(settings)}
           </h3>
 
+          <div className="flex items-center gap-6 text-sm mb-4">
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-3 w-3 rounded border border-green-300 bg-green-50" />
+              <span className="text-gray-700">Ideal</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-3 w-3 rounded border border-yellow-300 bg-yellow-50" />
+              <span className="text-gray-700">Fair</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block h-3 w-3 rounded border border-red-300 bg-red-50" />
+              <span className="text-gray-700">Poor</span>
+            </div>
+          </div>
+
           {isSettingsLoading && (
             <div className="text-center py-8">
               <p className="text-gray-600">Loading...</p>
