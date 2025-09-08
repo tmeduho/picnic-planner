@@ -22,25 +22,20 @@ function App() {
     isLoading,
     error,
   } = useQuery({
-    queryKey:
-      isReady && settings
-        ? [
-            'forecast',
-            settings.location.latitude,
-            settings.location.longitude,
-            userTimezone,
-          ]
-        : ['forecast'],
-    queryFn: () => {
-      if (!isReady || !settings) throw new Error('Settings not ready')
-      return getForecast({
+    queryKey: [
+      'forecast',
+      settings?.location.latitude,
+      settings?.location.longitude,
+      userTimezone,
+    ],
+    queryFn: () =>
+      getForecast({
         data: {
-          lat: settings.location.latitude,
-          lon: settings.location.longitude,
+          lat: settings!.location.latitude,
+          lon: settings!.location.longitude,
           tz: userTimezone,
         },
-      })
-    },
+      }),
     enabled: isReady && !!settings,
   })
 
