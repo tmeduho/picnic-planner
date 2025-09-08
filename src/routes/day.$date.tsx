@@ -45,6 +45,9 @@ function DayDetails() {
         },
       }),
     enabled: isReady && !!settings,
+    staleTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: true,
   })
 
   // get historical forecast data
@@ -70,6 +73,9 @@ function DayDetails() {
         },
       }),
     enabled: isReady && !!settings && !!date,
+    staleTime: 60 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: true,
   })
 
   const isLoading =

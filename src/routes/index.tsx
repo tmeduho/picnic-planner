@@ -37,6 +37,9 @@ function App() {
         },
       }),
     enabled: isReady && !!settings,
+    staleTime: 15 * 60 * 1000,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: true,
   })
 
   return (
