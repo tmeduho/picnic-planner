@@ -14,15 +14,25 @@ export const forecastResponseSchema = z.object({
   daily: dailyWeatherSchema,
 })
 
+export const historicalDailyWeatherSchema = z.object({
+  time: z.array(z.string()),
+  temperature_2m_max: z.array(z.number()),
+  temperature_2m_min: z.array(z.number()),
+  wind_speed_10m_max: z.array(z.number()),
+  relative_humidity_2m_mean: z.array(z.number()),
+  precipitation_sum: z.array(z.number()),
+})
+
 export const historicalResponseSchema = z.object({
-  daily: dailyWeatherSchema.extend({
-    precipitation_sum: z.array(z.number()),
-  }),
+  daily: historicalDailyWeatherSchema,
 })
 
 export type ForecastResponse = z.infer<typeof forecastResponseSchema>
 export type HistoricalResponse = z.infer<typeof historicalResponseSchema>
 export type DailyWeatherData = z.infer<typeof dailyWeatherSchema>
+export type HistoricalDailyWeatherData = z.infer<
+  typeof historicalDailyWeatherSchema
+>
 
 export interface IWeatherProvider {
   /**

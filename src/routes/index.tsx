@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { getForecast } from '../server/functions/getForcast'
-import { Calendar } from '../components/calendar'
+import { Calendar } from '../components/calendar/calendar'
 import { useWeatherSettings } from '../hooks/use-weather-settings'
 import { getLocationDisplay } from '../lib/utils'
 

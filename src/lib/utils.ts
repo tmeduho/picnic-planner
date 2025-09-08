@@ -20,3 +20,8 @@ export const getLocationDisplay = (settings: Settings | null): string => {
   const { location } = settings
   return location.name || `${location.latitude}, ${location.longitude}`
 }
+
+export const average = (values: number[]): number =>
+  values.length
+    ? values.reduce((sum, value) => sum + value, 0) / values.length
+    : 0
